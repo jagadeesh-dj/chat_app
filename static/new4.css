@@ -1,0 +1,244 @@
+*{
+    padding: 0%;
+    margin: 0%;
+    box-sizing: border-box;
+    text-decoration: none;
+    scrollbar-width: none;
+}
+.container{
+
+    padding: 1rem 1rem;
+
+}
+.main{
+    position: relative;
+    width: 100%;
+    height: 95vh;
+    display: flex;
+    background-color: rgb(117, 201, 105);
+
+}
+.user-list{
+
+    position: relative;
+    width: 25%;
+    padding: 0.5rem 0.5rem;
+    overflow-y: scroll;
+}
+#users{
+    margin-top: 10px;
+    cursor: pointer;
+    width: 100%;
+    height: 60px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    margin-bottom: 10px;
+    font-size: large;
+    gap: 10px;
+    border-radius:5px;
+}
+#users img{
+    border-radius: 50%;
+    border: 4px solid rgb(90, 173, 90);
+}
+.chat-box{
+    position: relative;
+    width: 75%;
+    height: 100%;
+    padding: 0.5rem 0.5rem;
+}
+.chatroom{
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: center;
+}
+.profile{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    height: 10%;
+    padding: 0.5rem 1rem;
+    background-color: white;
+    border-radius: 5px;
+}
+.profile img{
+    border-radius: 50%;
+}
+.message{
+    position: relative;
+    width: 100%;
+    height: 550px;
+    background-color: white;
+    overflow-y: scroll;
+    padding: 1rem 1rem;
+}
+.post-box{
+    padding: 0.5rem 0.5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    height: 10%;
+    background-color: white;
+    border-radius: 5px;
+    justify-content: center;
+    gap: 10px;
+}
+.table{
+    position: relative;
+    width: 100%;
+}
+.post-box input[type='text']{
+    width: 300px;
+    height: 40px;
+    border-radius: 15px;
+    outline: none;
+    border: none;
+    background-color: gainsboro;
+    padding-left: 10px;
+}
+#send-btn{
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background-color: rgb(117, 201, 105);
+    color: white;
+}
+#sender{
+    position: relative;
+    width: 100%;
+   
+}
+#sender p{
+    float: right;
+    background-color: blueviolet;
+    padding: 0.7rem 1rem;
+    color: white;
+    border-radius: 10px 0px 10px 10px;
+}
+#receiver{
+    position: relative;
+    width: 100%;
+   
+}
+#receiver p{
+    float: right;
+    background-color: rgb(117, 201, 105);
+    padding: 0.7rem 1rem;
+    color: black;
+    border-radius: 0px 10px 10px 10px ;
+
+
+}
+.user-logout button{
+    cursor: pointer;
+    width: 100%;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    background-color: blueviolet;
+    color: white;
+}
+.user-logout button{
+    padding-left: 20px;
+}
+.signup .post{
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+}
+.signup div{
+    margin-bottom: 10px;
+}
+.signup input[type='text']{
+    width: 300px;
+    height: 40px;
+    outline: none;
+    padding-left:10px ;    
+}
+.signup input[type='password']{
+    width: 300px;
+    height: 40px;
+    outline: none;
+    padding-left:10px ; 
+    display: inline;
+
+}
+
+.signup button{
+    width: 300px;
+    height: 40px;
+    border: none;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+}
+.signup .errors{
+    position: relative;
+    display: grid;
+    justify-content: center;
+        
+}
+.signup .errors small{
+    background-color: blueviolet;
+    padding: 0.5rem 0.5rem;
+    color: white;
+}
+
+
+
+
+
+.signin{
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+}
+.signin div{
+    margin-bottom: 10px;
+}
+.signin input[type='text']{
+    width: 300px;
+    height: 40px;
+    outline: none;
+    padding-left:10px ;    
+}
+.signin input[type='password']{
+    width: 300px;
+    height: 40px;
+    outline: none;
+    padding-left:10px ; 
+    display: inline;
+
+}
+
+.signin button{
+    width: 300px;
+    height: 40px;
+    border: none;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+}
+.signin .errors{
+    position: relative;
+    display: grid;
+    justify-content: center;
+        
+}
+.signin .errors small{
+    background-color: blueviolet;
+    padding: 0.5rem 0.5rem;
+    color: white;
+}
