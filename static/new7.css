@@ -4,29 +4,34 @@
     box-sizing: border-box;
     text-decoration: none;
     scrollbar-width: none;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-style: normal;
 }
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 .container{
 
-    padding: 1rem 1rem;
+    /* padding: 1rem 1rem; */
 
 }
 .main{
     position: relative;
     width: 100%;
-    height: 95vh;
+    height: 100vh;
     display: flex;
-    background-color: rgb(117, 201, 105);
 
 }
-.user-list{
 
+.user-list{
     position: relative;
     width: 25%;
     padding: 0.5rem 0.5rem;
     overflow-y: scroll;
+    border: 0.5px solid rgb(235, 230, 230);
+    
 }
 #users{
-    margin-top: 10px;
+    margin-top: 5px;
     cursor: pointer;
     width: 100%;
     height: 60px;
@@ -34,10 +39,11 @@
     display: flex;
     align-items: center;
     padding-left: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     font-size: large;
     gap: 10px;
     border-radius:5px;
+    border: 1px solid rgb(235, 230, 230);
 }
 #users img{
     border-radius: 50%;
@@ -50,22 +56,22 @@
     padding: 0.5rem 0.5rem;
 }
 .chatroom{
-    position: relative;
     display: flex;
     width: 100%;
     height: 100%;
     flex-direction: column;
-    gap: 5px;
     justify-content: center;
 }
 .profile{
     display: flex;
+    width: 100%;
     gap: 10px;
     align-items: center;
-    height: 10%;
     padding: 0.5rem 1rem;
-    background-color: white;
+    background-color: rgb(254, 255, 254);
     border-radius: 5px;
+    border-bottom: 1.5px solid rgb(235, 230, 230);
+
 }
 .profile img{
     border-radius: 50%;
@@ -73,30 +79,34 @@
 .message{
     position: relative;
     width: 100%;
-    height: 550px;
-    background-color: white;
+    min-height: 90%;
+    background-color:white;
     overflow-y: scroll;
-    padding: 1rem 1rem;
+    padding: 5rem 1rem;
+    scroll-behavior: smooth;
+    
 }
 .post-box{
-    padding: 0.5rem 0.5rem;
+    position: fixed;
+    bottom: 0%;
+    padding: 0.2rem 0.2rem;
     width: 100%;
     display: flex;
     align-items: center;
-    height: 10%;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     border-radius: 5px;
     justify-content: center;
     gap: 10px;
+    border-top: 1.5px solid rgb(235, 230, 230);
+
 }
 .table{
     position: relative;
     width: 100%;
 }
-.post-box input[type='text']{
-    width: 300px;
-    height: 40px;
-    border-radius: 15px;
+
+.post-box textarea{
+    border-radius: 5px;
     outline: none;
     border: none;
     background-color: gainsboro;
@@ -104,8 +114,8 @@
 }
 #send-btn{
     cursor: pointer;
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     border: none;
     border-radius: 50%;
     background-color: rgb(117, 201, 105);
@@ -114,14 +124,14 @@
 #sender{
     position: relative;
     width: 100%;
-   
 }
+
 #sender p{
     float: right;
-    background-color: blueviolet;
+    background-color: rgb(13, 11, 15);
     padding: 0.7rem 1rem;
     color: white;
-    border-radius: 10px 0px 10px 10px;
+    border-radius: 5px 0px 5px 5px;
 }
 #receiver{
     position: relative;
@@ -130,11 +140,11 @@
 }
 #receiver p{
     float: right;
-    background-color: rgb(117, 201, 105);
+    background-color:blueviolet;
     padding: 0.7rem 1rem;
-    color: black;
-    border-radius: 0px 10px 10px 10px ;
-
+    color: white;
+    border-radius: 0px 5px 5px 5px ;
+    margin-bottom: 5px;
 
 }
 .user-logout button{
@@ -143,7 +153,7 @@
     height: 40px;
     border: none;
     border-radius: 5px;
-    background-color: blueviolet;
+    background-color: black;
     color: white;
 }
 .user-logout button{
@@ -194,10 +204,6 @@
     color: white;
 }
 
-
-
-
-
 .signin{
     display: grid;
     justify-content: center;
@@ -241,4 +247,38 @@
     background-color: blueviolet;
     padding: 0.5rem 0.5rem;
     color: white;
+}
+
+@media screen and (max-width: 750px){
+    .user-list{
+        width: 40%;
+        
+    }
+    .chat-box{
+        width: 60%;
+    }
+}
+
+@media screen and (max-width: 500px){
+    .main{
+        flex: none;
+    }
+    .user-list{
+        width: 100%;
+    }   
+    .chat-box{
+        display: none; 
+        position: absolute;  
+        width: 100%; 
+    } 
+  
+    .profile{
+        position: sticky;
+        top: 0%;
+        z-index: 1;
+    }
+  
+    
+   
+    
 }

@@ -13,7 +13,7 @@ def Myview(request):
         return render(request,'signin.html')
     else:
         users=User.objects.exclude(username=request.user) 
-        return render(request,'index.html',{"users":users})
+        return render(request,'indexs.html',{"users":users})
 
 
 @login_required(login_url='/signin/')

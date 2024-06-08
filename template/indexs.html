@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'new4.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'new7.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <title>Chatapp</title>
@@ -12,32 +12,35 @@
 <body>
     <div class="container">
         <div class="main">
-            <div class="user-list">
+            <div class="user-list" id="user-list">
                 <div class="user-logout">
                     <a href="{% url 'logout' %}" id="logout"><button>Logout</button></a>
                 </div>
                 {% for user in users%}
-                <div id="users" value="{{user.id}}" onclick="websocket('{{user.id}}')">
+                <div id="users"  value="{{user.id}}" onclick="websocket('{{user.id}}')">
                     <img src="{% static 'simple-flat-isolated-people-icon-free-vector.jpg' %}" alt="" width="40px" height="40px">
                     <div value="{{user.id}}">{{ user.username }}</div>
                 </div>
                 {% endfor %}
             </div>
             <div class="chat-box" id="togg">
-               
             </div>
         </div>
     </div>
     <script>
-       
+        let chatsocket=null;
         function websocket(receiver_id){
 
-            const chatsocket=new WebSocket('ws://'+window.location.host+'/ws/chatroom/'+receiver_id+'/')
+            if (chatsocket){
+                chatsocket.close()
+            }
 
+            chatsocket=new WebSocket('ws://192.168.87.205:8000/ws/chatroom/'+receiver_id+'/')
+            
           
-            chatsocket.onopen=()=>{
+            chatsocket.onopen=(async ()=>{
                 
-                fetch('http://127.0.0.1:8000/chatroom/'+receiver_id+'/',{
+                fetch('http://192.168.87.205:8000/chatroom/'+receiver_id+'/',{
                             method: 'GET',
                         })
                         .then(res=>res.json())
@@ -45,15 +48,15 @@
                             const msg=data.message
                             
                             let chat=document.getElementById('togg')
-                            let chatbox=`<div class="chatroom">\
-                                                    <div class="profile">\
+                            let chatbox=`<div class="chatroom">
+                                                    <div class="profile">
                                                         <a href='{% url 'index' %}' id="back"><i class="fa-solid fa-arrow-left fa-lg" style="color: #04070c;"></i></a>
-                                                        <img src="{% static 'simple-flat-isolated-people-icon-free-vector.jpg' %}" alt="" width="40px" height="40px">\                                     
-                                                        ${data.receiver_name}\
-                                                    </div>\
-                                                    <div class="message">\
-                                                        <table class="table">\
-                                                            <tbody id='chat-body'>\
+                                                        <img src="{% static 'simple-flat-isolated-people-icon-free-vector.jpg' %}" alt="" width="40px" height="40px">                                     
+                                                        ${data.receiver_name}
+                                                    </div>
+                                                    <div class="message">
+                                                        <table class="table">
+                                                            <tbody id='chat-body'>
                                                                 ${msg.map(item=>`
                                                                     ${ item.sender_id == data.sender ?
                                                                         `<tr id="sender">
@@ -72,7 +75,6 @@
                                                                             <td >
                                                                                 <p style="float: left;">
                                                                                     <small>
-                                                                                        {{message.timestamp|time:'H:i'}}
                                                                                     </small>
                                                                                 ${ item.message }
                                                                                 </p>
@@ -83,20 +85,20 @@
                                                                 
                                                                     )}
         
-                                                            </tbody>\
-                                                        </table>\
-                                                    </div>\
-                                                    <div class="post-box">\
-                                                        <div>\
-                                                            <input type="text" name="msg" id="input" placeholder="Enter Your Message">\
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="post-box">
+                                                        <div>
+                                                            <textarea  id="input" name="msg" rows="3" cols="40" placeholder="Enter Your Message"></textarea>
+
                                                             <input type='text' id="sender_id" value='${data.sender}' hidden>
                                                             <input type='text' id="receiver_id" value='${data.receiver_id}' hidden>
-
-                                                        </div>\
-                                                        <div>\
+                                                        </div>
+                                                        <div>
                                                             <button id="send-btn"><i class="fa-solid fa-paper-plane" style="color: white;"></i></button>\
-                                                        </div>\
-                                                    </div>\
+                                                        </div>
+                                                    </div>
                                                 </div>`
                             chat.innerHTML=chatbox
 
@@ -119,7 +121,6 @@
                                 input.value=''
                                 input.focus()
                             })
-                            input.focus()
 
                             
 
@@ -129,10 +130,19 @@
                                 // chatsocket.close()
                                 console.log('window changed')
                             })
+                            
+                            const active_users=document.querySelectorAll('#users')
+                            active_users.forEach(ele=>{
+                                ele.addEventListener('click',(e)=>{
+                                    console.log(e.target.getAttribute('value'))
+                                })
+                            })
+                          
+                           
                         })
 
                 
-            }
+            })();
             chatsocket.onclose=()=>{
                  console.log("websocket onclose")
              }
@@ -166,9 +176,7 @@
                                                                             </tr>`
                     }
                 }
-                
-
-                 scrolldown();
+                scrolldown();
              }  
              
         }
@@ -176,8 +184,24 @@
             const scrollElement=document.querySelector('.message')
             scrollElement.scrollTop=scrollElement.scrollHeight
         }
+  
+        const body=document.querySelector('body')
+        if (body.clientWidth<=500){
+            const active_users=document.querySelectorAll('#users')
+            active_users.forEach(ele=>{
+                ele.addEventListener('click',(e)=>{
+                    document.querySelector('.chat-box').style.display="block"
+                    document.querySelector('.chat-box').style.width="100%"
+                    document.querySelector('.chat-box').style.flex="none"
+
+                    document.getElementById('user-list').style.display="none"
+
+
+                })
+            })
+        }
         
-        
+    
 
     </script>
 </body>
