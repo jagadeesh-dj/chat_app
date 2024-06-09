@@ -239,21 +239,21 @@
             const scrollElement=document.querySelector('.message')
             scrollElement.scrollTop=scrollElement.scrollHeight
         }
-  
-        const body=document.querySelector('body')
-        if (body.clientWidth<=500){
-            const active_users=document.querySelectorAll('#users')
-            active_users.forEach(ele=>{
-                ele.addEventListener('click',(e)=>{
-                    document.querySelector('.chat-box').style.display="block"
-                    document.querySelector('.chat-box').style.width="100%"
-                    document.querySelector('.chat-box').style.flex="none"
+        function user_click(){
 
-                    document.getElementById('user-list').style.display="none"
-
-
-                })
-            })
+            const body=document.querySelector('body')
+            if (body.clientWidth<=500){
+                const active_users=document.getElementById('users')
+                    active_users.addEventListener('click',(e)=>{
+                        document.querySelector('.chat-box').style.display="block"
+                        document.querySelector('.chat-box').style.width="100%"
+                        document.querySelector('.chat-box').style.flex="none"
+    
+                        document.getElementById('user-list').style.display="none"
+    
+    
+                    })
+            }
         }
         
     function search_users(){
@@ -272,11 +272,14 @@
                                                 <div value="${item.id}">${ item.username }</div>
                                             </div>`
                         user_list.innerHTML=find_user
+                        user_click()
+
                     }
                     if(e.target.value==""){
                         user_list.innerHTML=""
                        
                     }
+                    
              
                     
                 })
