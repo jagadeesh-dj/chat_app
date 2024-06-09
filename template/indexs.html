@@ -4,29 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'new7.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'new5.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <title>Chatapp</title>
 </head>
 <body>
-    <div class="container">
         <div class="main">
             <div class="user-list" id="user-list">
                 <div class="user-logout">
                     <a href="{% url 'logout' %}" id="logout"><button>Logout</button></a>
                 </div>
-                {% for user in users%}
-                <div id="users"  value="{{user.id}}" onclick="websocket('{{user.id}}')">
-                    <img src="{% static 'simple-flat-isolated-people-icon-free-vector.jpg' %}" alt="" width="40px" height="40px">
-                    <div value="{{user.id}}">{{ user.username }}</div>
+                <div class="search_bar">
+                    <input type="search" id="search" name="search-bar" placeholder="Let's Find">
                 </div>
-                {% endfor %}
+                <div id="search_users">
+
+                    <!-- {% for user in users%}
+                    <div id="users"  value="{{user.id}}" onclick="websocket('{{user.id}}')">
+                        <img src="{% static 'simple-flat-isolated-people-icon-free-vector.jpg' %}" alt="receiver profile">
+                        <div value="{{user.id}}">{{ user.username }}</div>
+                    </div>
+                    {% endfor %} -->
+                </div>
             </div>
             <div class="chat-box" id="togg">
             </div>
         </div>
-    </div>
     <script>
         let chatsocket=null;
         function websocket(receiver_id){
@@ -35,72 +39,123 @@
                 chatsocket.close()
             }
 
-            chatsocket=new WebSocket('ws://192.168.87.205:8000/ws/chatroom/'+receiver_id+'/')
+            chatsocket=new WebSocket('ws://127.0.0.1:8000/ws/chatroom/'+receiver_id+'/')
             
           
             chatsocket.onopen=(async ()=>{
                 
-                fetch('http://192.168.87.205:8000/chatroom/'+receiver_id+'/',{
+                fetch('http://127.0.0.1:8000/chatroom/'+receiver_id+'/',{
                             method: 'GET',
                         })
                         .then(res=>res.json())
                         .then(data=>{
                             const msg=data.message
-                            
-                            let chat=document.getElementById('togg')
-                            let chatbox=`<div class="chatroom">
-                                                    <div class="profile">
-                                                        <a href='{% url 'index' %}' id="back"><i class="fa-solid fa-arrow-left fa-lg" style="color: #04070c;"></i></a>
-                                                        <img src="{% static 'simple-flat-isolated-people-icon-free-vector.jpg' %}" alt="" width="40px" height="40px">                                     
-                                                        ${data.receiver_name}
-                                                    </div>
-                                                    <div class="message">
-                                                        <table class="table">
-                                                            <tbody id='chat-body'>
-                                                                ${msg.map(item=>`
-                                                                    ${ item.sender_id == data.sender ?
-                                                                        `<tr id="sender">
-                                                                            <td >
-                                                                                <p style="float: right;">
-                                                                                    ${ item.message }
-                                                                                    <small>
-                                                                                        
-                                                                                    </small>
-                                                                                </p>
-                                                                            
-                                                                            </td>
-                                                                        </tr>`
-                                                                    :
-                                                                        `<tr id="receiver">
-                                                                            <td >
-                                                                                <p style="float: left;">
-                                                                                    <small>
-                                                                                    </small>
-                                                                                ${ item.message }
-                                                                                </p>
-                                                                            </td>
-                                                                        
-                                                                        </tr>`
-                                                                    }`
-                                                                
-                                                                    )}
-        
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <div class="post-box">
-                                                        <div>
-                                                            <textarea  id="input" name="msg" rows="3" cols="40" placeholder="Enter Your Message"></textarea>
+                            let chat = document.getElementById('togg');
+                            let messagesHtml = msg.map(item => {
+                                if (item.sender_id == data.sender) {
+                                    return `<tr id="sender">
+                                                <td>
+                                                    <p style="float: right;">
+                                                        ${item.message}
+                                                        <small></small>
+                                                    </p>
+                                                </td>
+                                            </tr>`;
+                                } else {
+                                    return `<tr id="receiver">
+                                                <td>
+                                                    <p style="float: left;">
+                                                        <small></small>
+                                                        ${item.message}
+                                                    </p>
+                                                </td>
+                                            </tr>`;
+                                }
+                            }).join(''); // Join the array elements into a single string
 
-                                                            <input type='text' id="sender_id" value='${data.sender}' hidden>
-                                                            <input type='text' id="receiver_id" value='${data.receiver_id}' hidden>
-                                                        </div>
-                                                        <div>
-                                                            <button id="send-btn"><i class="fa-solid fa-paper-plane" style="color: white;"></i></button>\
-                                                        </div>
+                            let chatbox = `<div class="chatroom">
+                                                <div class="profile">
+                                                    <a href='{% url 'index' %}' id="back"><i class="fa-solid fa-arrow-left fa-lg" style="color: #04070c;"></i></a>
+                                                    <img src="{% static 'simple-flat-isolated-people-icon-free-vector.jpg' %}" alt="receiver_profile">
+                                                    ${data.receiver_name}
+                                                </div>
+                                                <div class="message">
+                                                    <table class="table">
+                                                        <tbody id='chat-body'>
+                                                            ${messagesHtml}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="post-box">
+                                                    <div>
+                                                        <textarea  id="input" name="msg" rows="3" cols="40" placeholder="Enter Your Message"></textarea>
+
+                                                        <input type='text' id="sender_id" value='${data.sender}' hidden>
+                                                        <input type='text' id="receiver_id" value='${data.receiver_id}' hidden>
                                                     </div>
-                                                </div>`
-                            chat.innerHTML=chatbox
+                                                    <div>
+                                                        <button id="send-btn"><i class="fa-solid fa-paper-plane" style="color: white;"></i></button>\
+                                                    </div>
+                                                </div>
+                                            </div>`;
+
+                            chat.innerHTML = chatbox;
+
+                            
+                            // let chat=document.getElementById('togg')
+                            // let chatbox=`<div class="chatroom">
+                            //                         <div class="profile">
+                            //                             <a href='{% url 'index' %}' id="back"><i class="fa-solid fa-arrow-left fa-lg" style="color: #04070c;"></i></a>
+                            //                             <img src="{% static 'simple-flat-isolated-people-icon-free-vector.jpg' %}" alt="receiver_profile" >                                     
+                            //                             ${data.receiver_name}
+                            //                         </div>
+                            //                         <div class="message">
+                            //                             <table class="table">
+                            //                                 <tbody id='chat-body'>
+                            //                                     ${msg.map(item=>`
+                            //                                         ${ (item.sender_id == data.sender) ?
+                            //                                             `<tr id="sender">
+                            //                                                 <td >
+                            //                                                     <p style="float: right;">
+                            //                                                         ${ item.message }
+                            //                                                         <small>
+                                                                                        
+                            //                                                         </small>
+                            //                                                     </p>
+                                                                            
+                            //                                                 </td>
+                            //                                             </tr>`
+                            //                                         :
+                            //                                             `<tr id="receiver">
+                            //                                                 <td >
+                            //                                                     <p style="float: left;">
+                            //                                                         <small>
+                            //                                                         </small>
+                            //                                                     ${ item.message }
+                            //                                                     </p>
+                            //                                                 </td>
+                                                                        
+                            //                                             </tr>`
+                            //                                         }`
+                                                                
+                            //                                     )}
+        
+                            //                                 </tbody>
+                            //                             </table>
+                            //                         </div>
+                            //                         <div class="post-box">
+                            //                             <div>
+                            //                                 <textarea  id="input" name="msg" rows="3" cols="40" placeholder="Enter Your Message"></textarea>
+
+                            //                                 <input type='text' id="sender_id" value='${data.sender}' hidden>
+                            //                                 <input type='text' id="receiver_id" value='${data.receiver_id}' hidden>
+                            //                             </div>
+                            //                             <div>
+                            //                                 <button id="send-btn"><i class="fa-solid fa-paper-plane" style="color: white;"></i></button>\
+                            //                             </div>
+                            //                         </div>
+                            //                     </div>`
+                            // chat.innerHTML=chatbox
 
 
 
@@ -201,8 +256,36 @@
             })
         }
         
-    
-
+    function search_users(){
+        const user_name=document.getElementById('search')
+        const user_list=document.getElementById('search_users')
+        fetch('http://127.0.0.1:8000/search/',{
+            method: 'GET',
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            data.map(item=>{
+                user_name.addEventListener("input",(e)=>{
+                    if(e.target.value==item.username){
+                        let find_user=`<div id="users"  value="${item.id}" onclick="websocket('${item.id}')">
+                                                <img src="{% static 'simple-flat-isolated-people-icon-free-vector.jpg' %}" alt="receiver profile">
+                                                <div value="${item.id}">${ item.username }</div>
+                                            </div>`
+                        user_list.innerHTML=find_user
+                    }
+                    if(e.target.value==""){
+                        user_list.innerHTML=""
+                       
+                    }
+             
+                    
+                })
+            })
+            
+        })
+      
+    }
+    search_users();
     </script>
 </body>
 </html>

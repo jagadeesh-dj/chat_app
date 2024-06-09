@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'new7.css' %}">
+    <link rel="stylesheet" href="{% static 'new5.css' %}">
     <title>SignIn</title>
 </head>
 <body>
     <div class="signin">
-        <form action="" method="post">
+        <form action="" method="post" autocomplete="off">
             {% csrf_token %}
             <div class="errors">
                 {% if messages %}

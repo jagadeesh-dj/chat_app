@@ -15,6 +15,11 @@ def Myview(request):
         users=User.objects.exclude(username=request.user) 
         return render(request,'indexs.html',{"users":users})
 
+@login_required
+def search(request):
+    users=User.objects.exclude(username=request.user)
+    data=[{'username':i.username,'id':i.id} for i in users]
+    return JsonResponse(data=data,safe=False)
 
 @login_required(login_url='/signin/')
 def chatroom(request,receiver):
@@ -56,7 +61,6 @@ def signup(request):
         mail=request.POST.get("mail")
         password=request.POST.get("password")
         confirm_pass=request.POST.get("confirm_pass")
-
         if username=="" or mail=="" or password=="" or confirm_pass=="":
             messages.warning(request,'Empty Values not accepted')
             return redirect('/signup')
@@ -64,8 +68,8 @@ def signup(request):
             if User.objects.filter(username=username).exists():
                 messages.warning(request,f'Username already taken')
                 return redirect('/signup')
-            if User.objects.filter(email=mail).exists():
-                messages.warning(request,f'Mail already exists')
+            if User.objects.filter(email=mail).exists() or mail.endswith('@gmail.com')==False:
+                messages.warning(request,f'Mail already exists or invalid mail')
                 return redirect('/signup')
             if password==confirm_pass:
                 model=User.objects.create_user(username=username,email=mail,password=password)
