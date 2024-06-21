@@ -33,28 +33,49 @@ class chatconsumer(AsyncWebsocketConsumer):
         
     async def receive(self,text_data):
         data=json.loads(text_data)
-        print(data)
+        # print(data['type'])
+        type=data.get('type','')
+        typing_indicator=data.get('bool','')
+        type_icon_receiver=data.get('typing_icon_receiver','')
+        message=data.get('message','')
+        sender=data.get('sender','')
+        receiver=data.get('receiver','')
 
-        message=data['message']
-        sender=data['sender']
-        receiver=data['receiver']
+        if type=="message":
+            await self.save_message(sender,receiver,message)
+            await self.channel_layer.group_send(
+                self.group_room_name,
+                {
+                    'type': 'chat_message',
+                    'message': message,
+                    'sender': sender
+                }
+            )
+        elif type=='typing':
+            await self.channel_layer.group_send(
+                self.group_room_name,
+                {
+                    'type': 'chat_typing',
+                    'typing_indicator': typing_indicator,
+                    'type_icon_receiver':type_icon_receiver
+                }
+            )
+    async def chat_typing(self,event):
+        typing_indicator=event['typing_indicator']
+        type_icon_receiver=event['type_icon_receiver']
 
-        await self.save_message(sender,receiver,message)
-
-        await self.channel_layer.group_send(
-            self.group_room_name,
-            {
-                'type': 'chat.message',
-                'message': message,
-                'sender': sender
-            }
-        )
+        await self.send(text_data=json.dumps({
+            'type':'typing',
+            'bool':typing_indicator,
+            'type_icon_receiver': type_icon_receiver
+        }))
 
     async def chat_message(self,event):
         message=event['message']
         sender=event['sender']
 
         await self.send(text_data=json.dumps({
+            'type':'message',
             'message':message,
             'sender':sender
         }))

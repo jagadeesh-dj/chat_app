@@ -12,8 +12,15 @@ def Myview(request):
     if not request.user.is_authenticated:
         return render(request,'signin.html')
     else:
-        users=User.objects.exclude(username=request.user) 
-        return render(request,'indexs.html',{"users":users})
+        # users=User.objects.exclude(username=request.user)
+        sender=Message.objects.filter(sender=request.user).values_list('receiver',flat=True)
+        receiver = Message.objects.filter(receiver=request.user).values_list('sender', flat=True)
+        chatted_users_ids = set(sender).union(set(receiver))
+        chatted_users = User.objects.filter(id__in=chatted_users_ids)
+        read=Message.objects.filter(is_read=False)
+        
+        print([i.id for i in read])
+        return render(request,'indexs.html',{"users":chatted_users})
 
 @login_required
 def search(request):
@@ -34,7 +41,8 @@ def chatroom(request,receiver):
     data={'message':list(message.values()),
            'sender':request.user.id,
            'receiver_id':receiver.id,
-           'receiver_name':receiver.username
+           'receiver_name':receiver.username,
+           'sender_name':request.user.username
            }
            
     return JsonResponse(data,safe=False)
